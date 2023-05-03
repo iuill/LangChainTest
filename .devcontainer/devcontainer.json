@@ -3,38 +3,53 @@
     "dockerFile": "Dockerfile",
     "extensions": [
         "ms-python.python",
-        "ms-python.flake8"
-	],
+        "ms-python.flake8",
+        "ms-python.black-formatter"
+    ],
     "settings": {
+        // Python実行環境
         "terminal.integrated.profiles.linux": {
             "bash": {
                 "path": "/bin/bash",
-                "args": [
-                ],
+                "args": [],
                 "overrideName": true,
-                "env": {
-                },
+                "env": {},
                 "icon": "terminal-cmd",
                 "color": "terminal.ansiRed"
             }
         },
         "terminal.integrated.defaultProfile.linux": "bash",
         "python.pythonPath": "/usr/local/bin/python",
+        // Lint
+        "python.linting.enabled": true,
+        "python.linting.lintOnSave": true,
+        // Pylance
+        "python.languageServer": "Pylance",
+        "python.analysis.completeFunctionParens": true,
+        "python.analysis.typeCheckingMode": "strict",
+        "python.analysis.diagnosticMode": "workspace",
+        // Linter(flake8)
+        "python.linting.flake8Path": "/usr/local/py-utils/bin/flake8", // 環境により変わる
         "python.linting.pylintEnabled": false,
         "python.linting.flake8Enabled": true,
         "python.linting.flake8Args": [
-            "--ignore=E402,E501"
+            "--max-line-length=88",
+            "--ignore=E203,W503,W504"
         ],
-        "python.formatting.provider": "autopep8",
-        "python.formatting.autopep8Args": [
-            "--ignore",
-            "E402,E501",
-            "--max-line-length",
-            "150"
-        ],
+        // Formatter(black)
+        "python.formatting.provider": "black",
+        "python.formatting.blackPath": "/usr/local/py-utils/bin/black", // 環境により変わる
+        // General
+        "python.formatting.blackArgs": [],
         "[python]": {
-            "editor.formatOnSave": true
+            "editor.defaultFormatter": "ms-python.black-formatter",
+            "editor.formatOnSave": true, // 保存時の自動整形
+            "editor.formatOnPaste": false, // ペースト時の自動整形
+            "editor.formatOnType": false, // タイプ時の自動整形
         }
     },
-    "postCreateCommand": "pip install -r requirements.txt"
+
+    "postCreateCommand": "pip install  --no-cache-dir -r requirements.txt",
+    //"runArgs": ["--gpus", "all","--shm-size","8gb"]
+    "runArgs": ["--gpus", "all"]
 }
